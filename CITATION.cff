@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Network analyses of computer log files
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jesper
+    family-names: Bruun
+    email: jbruun@ind.ku.dk
+    affiliation: Universityn of Copenhagen
+    orcid: 'https://orcid.org/0000-0003-4739-7351'
+repository-code: 'https://github.com/jbruun/NA_logfiles'
+abstract: >-
+  This is a repository that illustrates how you can use
+  network analyses to analyze web-log files
+keywords:
+  - network analysis
+  - physics education research
+  - online problems
+  - log files
+  - problem solving
+license: CC-BY-4.0
+version: '1.0'
+date-released: '2024-04-25'
