@@ -786,15 +786,23 @@ x8<-data.frame(mu8[memMat[,8]!=0],memMat[memMat[,8]!=0,8])
 x9<-data.frame(mu9[memMat[,9]!=0],memMat[memMat[,9]!=0,9])
 x10<-data.frame(mu10[memMat[,10]!=0],memMat[memMat[,10]!=0,10])
 
-############################
-#Group Mus with two groups
-############################
 names(x1)<-c("cont","weight")
 names(x2)<-c("cont","weight")
 names(x3)<-c("cont","weight")
-names(x7)<-c("cont","weight") 
+names(x4)<-c("cont","weight") 
+names(x5)<-c("cont","weight")
 names(x6)<-c("cont","weight")
-xA<-rbind(x1,x2,x3,x6,x7)
+names(x7)<-c("cont","weight")
+names(x8)<-c("cont","weight")
+names(x9)<-c("cont","weight") 
+names(x10)<-c("cont","weight")
+
+###########################
+#Groups based on PCA 1 scores (Linear Length)
+############################
+pppS(WmeanPCA$WmeanPCA1,WconfPCA$WconfPCA1)
+#based on this, the groups should be A=8,5,3, B=7,1,9,10,4,3 and C=6
+xA<-rbind(x8,x5,x2)
 xA<-xA[complete.cases(xA),]
 meanMuA<-sum(xA[,1],na.rm=T)/sum(xA[!is.na(xA[,1]),2])
 deviations<-xA[,1]-meanMuA
@@ -803,14 +811,142 @@ V<-sum(xA[,2])
 standardDev<-sqrt(nominator/V)
 CIA<-1.96*standardDev/sqrt(V)
 
- 
-names(x4)<-c("cont","weight")
-names(x5)<-c("cont","weight")  
-names(x8)<-c("cont","weight")
-names(x9)<-c("cont","weight")
-names(x10)<-c("cont","weight")
+xB<-rbind(x7,x1,x9)
+xB<-xB[complete.cases(xB),]
+meanMuB<-sum(xB[,1],na.rm=T)/sum(xB[!is.na(xB[,1]),2])
+deviations<-xB[,1]-meanMuB
+nominator<-sum(xB[,2]*deviations^2)
+V<-sum(xB[,2])
+standardDev<-sqrt(nominator/V)
+CIB<-1.96*standardDev/sqrt(V)
 
-xB<-rbind(x4,x5,x8,x9,x10)
+xC<-rbind(x4,x3,x6)
+xC<-xC[complete.cases(xC),]
+meanMuC<-sum(xC[,1],na.rm=T)/sum(xC[!is.na(xC[,1]),2])
+deviations<-xC[,1]-meanMuC
+nominator<-sum(xC[,2]*deviations^2)
+V<-sum(xC[,2])
+standardDev<-sqrt(nominator/V)
+CIC<-1.96*standardDev/sqrt(V)
+
+meanMuG<-c(meanMuA,meanMuB,meanMuC)
+CIG<-c(CIA,CIB,CIC)
+x<-c(1.1,1.5,1.9)
+plot(x,meanMuG,xlim=c(1,2),ylim=range(c(meanMuG-CIG, meanMuG+CIG)),xaxt="n",
+     pch=19,  ylab="Mean mu (95% CI)", xlab = "Group"
+)
+axis(1, at=x, labels=c("A","B","C"))
+arrows(x, meanMuG-CIG, x, meanMuG+CIG, length=0.05, angle=90, code=3)
+
+
+###########################
+#Groups based on PCA 2 scores (Mututality)
+############################
+pppS(WmeanPCA$WmeanPCA2,WconfPCA$WconfPCA2)
+#based on this, the groups should be A=8,6 B=1,2 and C=3,5,7, D=4,10,9
+
+xA<-rbind(x8,x6)
+xA<-xA[complete.cases(xA),]
+meanMuA<-sum(xA[,1],na.rm=T)/sum(xA[!is.na(xA[,1]),2])
+deviations<-xA[,1]-meanMuA
+nominator<-sum(xA[,2]*deviations^2)
+V<-sum(xA[,2])
+standardDev<-sqrt(nominator/V)
+CIA<-1.96*standardDev/sqrt(V)
+ 
+xB<-rbind(x1,x2)
+xB<-xB[complete.cases(xB),]
+meanMuB<-sum(xB[,1],na.rm=T)/sum(xB[!is.na(xB[,1]),2])
+deviations<-xB[,1]-meanMuB
+nominator<-sum(xB[,2]*deviations^2)
+V<-sum(xB[,2])
+standardDev<-sqrt(nominator/V)
+CIB<-1.96*standardDev/sqrt(V)
+
+xC<-rbind(x3,x5,x7)
+xC<-xC[complete.cases(xC),]
+meanMuC<-sum(xC[,1],na.rm=T)/sum(xC[!is.na(xC[,1]),2])
+deviations<-xC[,1]-meanMuC
+nominator<-sum(xC[,2]*deviations^2)
+V<-sum(xC[,2])
+standardDev<-sqrt(nominator/V)
+CIC<-1.96*standardDev/sqrt(V)
+
+xD<-rbind(x4,x9,x10)
+xD<-xD[complete.cases(xD),]
+meanMuD<-sum(xD[,1],na.rm=T)/sum(xD[!is.na(xD[,1]),2])
+deviations<-xD[,1]-meanMuD
+nominator<-sum(xD[,2]*deviations^2)
+V<-sum(xD[,2])
+standardDev<-sqrt(nominator/V)
+CID<-1.96*standardDev/sqrt(V)
+
+meanMuG<-c(meanMuA,meanMuB,meanMuC,meanMuD)
+CIG<-c(CIA,CIB,CIC,CID)
+x<-c(1.1,1.367,1.634,1.9)
+plot(x,meanMuG,xlim=c(1,2),ylim=range(c(meanMuG-CIG, meanMuG+CIG)),xaxt="n",
+     pch=19,  ylab="Mean mu (95% CI)", xlab = "Cluster"
+)
+axis(1, at=x, labels=c("A","B","C","D"))
+arrows(x, meanMuG-CIG, x, meanMuG+CIG, length=0.05, angle=90, code=3)
+
+###########################
+#Groups based on PCA 3 scores (Navigation)
+############################
+pppS(WmeanPCA$WmeanPCA3,WconfPCA$WconfPCA3)
+#based on this, the groups should be A=9 B=6,5,7,1,3,2,10,8 and C=4 
+
+xA<-rbind(x9)
+xA<-xA[complete.cases(xA),]
+meanMuA<-sum(xA[,1],na.rm=T)/sum(xA[!is.na(xA[,1]),2])
+deviations<-xA[,1]-meanMuA
+nominator<-sum(xA[,2]*deviations^2)
+V<-sum(xA[,2])
+standardDev<-sqrt(nominator/V)
+CIA<-1.96*standardDev/sqrt(V)
+
+xB<-rbind(x6,x5,x7,x1,x3,x2,x10,x8)
+xB<-xB[complete.cases(xB),]
+meanMuB<-sum(xB[,1],na.rm=T)/sum(xB[!is.na(xB[,1]),2])
+deviations<-xB[,1]-meanMuB
+nominator<-sum(xB[,2]*deviations^2)
+V<-sum(xB[,2])
+standardDev<-sqrt(nominator/V)
+CIB<-1.96*standardDev/sqrt(V)
+
+xC<-rbind(x4)
+xC<-xC[complete.cases(xC),]
+meanMuC<-sum(xC[,1],na.rm=T)/sum(xC[!is.na(xC[,1]),2])
+deviations<-xC[,1]-meanMuC
+nominator<-sum(xC[,2]*deviations^2)
+V<-sum(xC[,2])
+standardDev<-sqrt(nominator/V)
+CIC<-1.96*standardDev/sqrt(V)
+
+
+meanMuG<-c(meanMuA,meanMuB,meanMuC)
+CIG<-c(CIA,CIB,CIC)
+x<-c(1.1,1.367,1.634)
+plot(x,meanMuG,xlim=c(1,2),ylim=range(c(meanMuG-CIG, meanMuG+CIG)),xaxt="n",
+     pch=19,  ylab="Mean mu (95% CI)", xlab = "Cluster"
+)
+axis(1, at=x, labels=c("A","B","C"))
+arrows(x, meanMuG-CIG, x, meanMuG+CIG, length=0.05, angle=90, code=3)
+
+############################
+#Group Mus with two groups
+############################
+
+xA<-rbind(x2,x5,x8)
+xA<-xA[complete.cases(xA),]
+meanMuA<-sum(xA[,1],na.rm=T)/sum(xA[!is.na(xA[,1]),2])
+deviations<-xA[,1]-meanMuA
+nominator<-sum(xA[,2]*deviations^2)
+V<-sum(xA[,2])
+standardDev<-sqrt(nominator/V)
+CIA<-1.96*standardDev/sqrt(V)
+
+xB<-rbind(x7,x1,x9,x10,x4,x3,x6)
 xB<-xB[complete.cases(xB),]
 meanMuB<-sum(xB[,1],na.rm=T)/sum(xB[!is.na(xB[,1]),2])
 deviations<-xB[,1]-meanMuB
