@@ -32,7 +32,7 @@ make.click.graph<-function(nSession){
   sourceNode<-x[1:length(x)-1] # nodes to which actions point
   targetNode<-x[2:length(x)] #nodes from which actions point
   edgelist<-cbind(sourceNode,targetNode) #the finished adjacency list
-  g<-graph.edgelist(as.matrix(edgelist),directed=T) #use igraph to make an graph from the adjacency list
+  g<-graph_from_edgelist(as.matrix(edgelist),directed=T) #use igraph to make an graph from the adjacency list
   E(g)$delta_t<-delta_t #Links of graph get the delta_t attribute. 
   E(g)$weight<-1 #The weight attribute of each link is set to 1. 
   g$week<-as.numeric(b[1,18]) #graph level attributes for later analyses. 
@@ -105,6 +105,7 @@ characteristics<-function(g){
   return(result)
 }
 
+#Remove hashtag characters below to run characterize:
 #characterize<-matrix(0,ncol=25,nrow=length(networkArray))
 #for (i in 1:length(networkArray)){
  # characterize[i,]<-as.numeric(characteristics(networkArray[[i]]))

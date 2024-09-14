@@ -39,17 +39,7 @@ for (i in 2:26){#for problem-solving sessions
 ########ANALYSES OF CLUSTERS###########
 ######################################
 
-#Matrix of membership
-memMat<-matrix(0,ncol=12,nrow=231)
-for (i in 1:length(overlap[,1])){
-  memMat[overlap$node[i],overlap$group[i]]<-overlap$flow[i]#for each node for each cluster, list the flow as calculated by Infomap
-}
-memMat<-memMat/rowSums(memMat) #normalized membership matrix: replace raw flow value with fractional flow value.
-memMat[is.na(memMat)]<-0 # replace NAs with 0s
-memMat[17,11]<-1
-memMat[147,12]<-1
 
-Fmemb<-colSums(memMat) #To be used in mean and standard deviaton calculations
 #Network measures for fractional membership. 
 #For all 23 network measures do the following:
 WmeanN<-vector()
@@ -560,6 +550,20 @@ ppp<-function(avg,sdev){
   
 }
 
+pppS<-function(avg,sdev){
+  a<-min(avg-sdev)
+  b<-max(avg+sdev)
+  x<-1:length(avg)
+  y<-data.frame(avg,sdev,x)
+  y<-y[order(y$avg), ]
+  plot(x, y$avg, ylim=range(c(a, b)),  pch=19, xlab="Cluster", ylab="Mean +/- 95% conf. int."
+  )
+  text(x-0.25,y$avg,labels=y$x)
+  # hack: we draw arrows but with very special "arrowheads"
+  arrows(x, y$avg-y$sdev, x, y$avg+y$sdev, length=0.05, angle=90, code=3)
+  
+}
+
 par(mfrow=c(5,1))
 ppp(WmeanPCA[,1],WconfPCA[,1])
 ppp(WmeanPCA[,2],WconfPCA[,2])
@@ -766,8 +770,7 @@ plot(x,meanConfMu_n[,1],ylim=range(c(meanConfMu_n[,1]-meanConfMu_n[,2], meanConf
 arrows(x, meanConfMu_n[,1]-meanConfMu_n[,2], x, meanConfMu_n[,1]+meanConfMu_n[,2], length=0.05, angle=90, code=3)
 
 
-# hack: we draw arrows but with very special "arrowheads"
-arrows(z, meanMux-confMux, z, meanMux+confMux, length=0.05, angle=90, code=3)
+
 
 ###########################
 #x1-x10

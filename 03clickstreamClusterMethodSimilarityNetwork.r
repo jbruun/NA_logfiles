@@ -16,7 +16,7 @@ source("backboneExtraction.r") #If you use this script, please cite Author 2019
 g<-graph_from_adjacency_matrix(adjMat[ps,ps],weighted=T,diag=F,mode = "upper") #Make a subnetwork of the problem-solving sessions
 V(g)$id<-V(g)$name 
 gBB<-backboneNetwork(g,0.05,2) #Create the backbone network with alpha=0.05
-write.graph(gBB,"backbone.net",format="pajek") #Write the backbone network to working directory. 
+write_graph(gBB,"backbone.net",format="pajek") #Write the backbone network to working directory. 
 
 #######FINDING CLUSTERS######################
 
@@ -27,6 +27,18 @@ write.graph(gBB,"backbone.net",format="pajek") #Write the backbone network to wo
 #Retrieve .tree file and extract clusters
 #Or use this:
 overlap<-read.csv("overlappingGroups.csv",dec = ",")
+
+#We create a matrix to keep account of each session's membership
+memMat<-matrix(0,ncol=12,nrow=231)
+for (i in 1:length(overlap[,1])){
+  memMat[overlap$node[i],overlap$group[i]]<-overlap$flow[i]#for each node for each cluster, list the flow as calculated by Infomap
+}
+memMat<-memMat/rowSums(memMat) #normalized membership matrix: replace raw flow value with fractional flow value.
+memMat[is.na(memMat)]<-0 # replace NAs with 0s
+memMat[17,11]<-1
+memMat[147,12]<-1
+
+Fmemb<-colSums(memMat) #To be used in mean and standard deviaton calculations
 
 #Here is code for printing all session networks to a file
 pdf("Cluster1.pdf")
