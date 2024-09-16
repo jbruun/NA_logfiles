@@ -9,7 +9,8 @@
 ############################################
 
 #Read data and define column names
-#setwd("path/to/relevant/directory") #Set working directory to where you have placed OWA_clickstream20nov2014.csv
+#Download OWA_clickstream20nov2014.csv from this Google Drive folder: 
+#https://drive.google.com/drive/folders/1tTyesPnyqpqhKJzz5qKpQfUQIAJJEY6I?usp=sharing
 clicks<-read.csv("OWA_clickstream20nov2014.csv", header = F)
 names(clicks)<-c("id","visitor_id","session_id","site_id","referer_id","ua_id","host_id","os_id","location_id","referring_search_term_id","timestamp","yyyymmdd","year","month","day","dayofweek","dayofyear","weekofyear","last_req","ip_address","is_new_visitor","is_repeat_visitor","language","days_since_prior_session","days_since_first_session","num_prior_sessions","medium","source_id","ad_id","campaign_id","user_name","cv1_name","cv1_value","cv2_name","cv2_value","cv3_name","cv3_value","cv4_name","cv4_value","cv5_name","cv5_value","last_impression_id","document_id","target_id","target_url","hour","minute","second","msec","click_x","click_y","page_width","page_height","position","approx_position","dom_element_x","dom_element_y","dom_element_name","dom_element_id","dom_element_value","dom_element_tag","dom_element_text","dom_element_class","dom_element_parent_id","tag_id","placement_id","ad_group_id","host")
 
